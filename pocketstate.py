@@ -35,10 +35,8 @@ class PocketState:
 	# rotate on x axis, horizontal from front
 	def abscissa_operator(self, action):
 		if action == 'c': # clockwise 90 degrees
-			# adjust front, top, back, and bottom
-			temp_front = self.state[0,:,1]
-			
 			# front
+			temp_front = self.state[0,:,1]
 			self.state[0,:,1] = self.state[4,:,1]
 			
 			# bottom
@@ -57,10 +55,8 @@ class PocketState:
 			self.state[5,0] = temp_right[:,0]
 			self.state[5,1] = temp_right[:,1]
 		elif action == 'cc': # counter-clockwise 90 degrees
-			# adjust front, top, back, and bottom
-			temp_front = self.state[0,:,1]
-			
 			# front
+			temp_front = self.state[0,:,1]
 			self.state[0,:,1] = self.state[3,:,1]
 			
 			# top
@@ -79,17 +75,21 @@ class PocketState:
 			self.state[5,0] = temp_right[:,1]
 			self.state[5,1] = temp_right[:,0]
 		elif action == 'f': # flip 180 degrees
-			# adjust front, top, back, and bottom
-			temp_front = self.state[0,:,1]
-			temp_top = self.state[2,:,1]
-			
 			# front
+			temp_front = self.state[0,:,1]
+			self.state[0,0,1] = self.state[1,0,0]
+			self.state[0,1,1] = self.state[1,1,0]
 			
 			# back
+			self.state[1,0,0] = temp_front[0]
+			self.state[1,1,0] = temp_front[1]
 
 			# top
+			temp_top = self.state[2,:,1]
+			self.state[2,:,1] = self.state[3,:,1]
 
 			# bottom
+			self.state[3,:,1] = temp_top
 
 			# rotate right
 			temp_right = self.state[5]
