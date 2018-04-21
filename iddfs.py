@@ -1,4 +1,4 @@
-from multiprocessing import Pool
+from multiprocessing import Pool, Queue
 
 from pocketstate import PocketState
 
@@ -13,11 +13,22 @@ class PocketIDDFS:
 		self.max_depth = max_depth
 
 	def run(self, workers=1):
-		for iter_depth in range(self.start_depth, self.max_depth+1):
-			print "depth %d" % iter_depth
-			solution_path = self._dfs(self.init_state, None, iter_depth, [])
-			if solution_path:
-				return solution_path
+		assert workers > 0
+		if workers == 1:
+			for iter_depth in range(self.start_depth, self.max_depth+1):
+				print "depth %d" % iter_depth
+				solution_path = self._dfs(self.init_state, None, iter_depth, [])
+				if solution_path:
+					return solution_path
+		else:
+			pool = Pool(workers)
+			# set up Queue which workers will pop jobs off from
+			# set up Queue which workers return to
+			# parent will continuously check queue until path is found, then terminate all workers
+			for iter_depth in range(self.start_depth, self.max_depth+1):
+				print "depth %d" % iter_depth
+				# split up search space
+
 
 	def _dfs(self, state, last_axis, depth, path):
 		if depth == 0: # if goal state is reached, return path to goal

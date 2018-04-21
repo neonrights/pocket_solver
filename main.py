@@ -3,19 +3,19 @@ import argparse
 
 from iddfs import PocketIDDFS
 
-
-test_state = [[['w', 'w'],
-			   ['g', 'w']],
-			  [['y', 'y'],
+# parse arguments, state or file containing states, number of workers, max depth to search to
+test_state = [[['r', 'w'],
 			   ['y', 'g']],
-			  [['b', 'b'],
-			   ['b', 'b']],
 			  [['o', 'g'],
-			   ['o', 'g']],
-			  [['o', 'o'],
-			   ['y', 'w']],
-			  [['r', 'r'],
-			   ['r', 'r']]]
+			   ['b', 'o']],
+			  [['r', 'y'],
+			   ['y', 'b']],
+			  [['b', 'r'],
+			   ['g', 'w']],
+			  [['y', 'b'],
+			   ['w', 'o']],
+			  [['r', 'g'],
+			   ['w', 'o']]]
 
 solver = PocketIDDFS(test_state)
 print solver.run()
