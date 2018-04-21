@@ -1,0 +1,1 @@
+Simple solver for a pocket cube.  Uses iterative deepening depth first search to find path to solution.  Uses basic knowledge of the search space to reduce the branching factor to 6.  Makes use of simple parrallelism to split up the search space at deeper depths.
