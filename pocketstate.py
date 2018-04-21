@@ -100,10 +100,11 @@ class PocketState:
 			child.state[2,1,1] = self.state[4,0,1]
 
 			# left
-			child.state[4,:,1] = self.state[3,1]
+			child.state[4,:,1] = self.state[3,0]
 
 			# bottom
-			child.state[3,0] = self.state[5,:,0]
+			child.state[3,0,0] = self.state[5,1,0]
+			child.state[3,0,1] = self.state[5,0,0]
 
 			# right
 			child.state[5,:,0] = self.state[2,1]
@@ -116,7 +117,8 @@ class PocketState:
 			child.state[2,1] = self.state[5,:,0]
 
 			# right
-			child.state[5,:,0] = self.state[3,0]
+			child.state[5,0,0] = self.state[3,0,1]
+			child.state[5,1,0] = self.state[3,0,0]
 
 			# bottom
 			child.state[3,0] = self.state[4,:,1]
@@ -218,18 +220,7 @@ class PocketState:
 
 def test_operators():
 	print "Testing operators..."
-	test_state = np.array([[['w', 'w'],
-						    ['g', 'w']],
-						   [['y', 'y'],
-						    ['y', 'g']],
-						   [['b', 'r'],
-						    ['b', 'b']],
-						   [['o', 'g'],
-						    ['o', 'g']],
-						   [['o', 'o'],
-						    ['y', 'w']],
-						   [['r', 'b'],
-						    ['r', 'r']]])
+	test_state = np.arange(24).reshape(6,2,2)
 
 	pocket = PocketState(test_state)
 	names = ['abscissa', 'ordinate', 'applicate']
@@ -239,12 +230,21 @@ def test_operators():
 		assert_array_equal(grandchild_pocket.state, test_state,
 				'%s quarter turn\n%s' % (names[i], grandchild_pocket.state))
 
+		flip_pocket = pocket.operators[i]('f')
+		clockwise_pocket = pocket.operators[i]('c').operators[i]('c')
+		counter_pocket = pocket.operators[i]('cc').operators[i]('cc')
+		assert_array_equal(flip_pocket.state, clockwise_pocket.state,
+				'%s clockwise to flip\n%s' % (names[i], flip_pocket.state == clockwise_pocket.state))
+		assert_array_equal(flip_pocket.state, counter_pocket.state,
+				'%s counter-clockwise to flip\n%s' % (names[i], flip_pocket.state == counter_pocket.state))
+
 		child_pocket = pocket.operators[i]('f')
 		grandchild_pocket = child_pocket.operators[i]('f')
 		assert_array_equal(grandchild_pocket.state, test_state,
 				'%s flip\n%s' % (names[i], grandchild_pocket.state))
 
 	print "Operator unit tests passed"
+
 
 def test_goal():
 	print "Testing goal checker..."
