@@ -4,7 +4,7 @@ from pocketstate import PocketState
 
 
 class PocketIDDFS:
-	axis_names = ['abscissa', 'ordinate', 'applicate']
+	axis_names = ['x', 'y', 'z']
 	move_names = {'c': 'clockwise 90', 'cc': 'counter-clockwise 90', 'f': 'flip 180'}
 
 	def __init__(self, state, min_depth=0, max_depth=11):
@@ -12,15 +12,9 @@ class PocketIDDFS:
 		self.start_depth = min_depth
 		self.max_depth = max_depth
 
-	def run(self, workers=1):
-		assert workers > 0
-		if workers == 1:
-			for iter_depth in range(self.start_depth, self.max_depth+1):
-				print "depth %d" % iter_depth
-				solution_path = self._dfs(self.init_state, None, iter_depth, [])
-				if solution_path:
-					return solution_path
-		else:
+	def run(self, workers=None):
+		if workers:
+			assert workers > 1
 			pool = Pool(workers)
 			# set up Queue which workers will pop jobs off from
 			# set up Queue which workers return to
@@ -28,6 +22,14 @@ class PocketIDDFS:
 			for iter_depth in range(self.start_depth, self.max_depth+1):
 				print "depth %d" % iter_depth
 				# split up search space
+
+		else:
+			for iter_depth in range(self.start_depth, self.max_depth+1):
+				print "depth %d" % iter_depth
+				solution_path = self._dfs(self.init_state, None, iter_depth, [])
+				if solution_path:
+					return solution_path
+
 
 
 	def _dfs(self, state, last_axis, depth, path):

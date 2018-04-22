@@ -15,8 +15,7 @@ r w b g y o
 
 class PocketState:
 	def __init__(self, state):
-		self.state = np.array(state)
-		assert self.state.shape == (6,2,2)
+		self.state = np.array(state).reshape(6,2,2)
 		self.operators = [self._abscissa, self._ordinate, self._applicate]
 
 	# rotate on x axis, horizontal from front
